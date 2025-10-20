@@ -13,22 +13,25 @@ const server = http.createServer((req,res)=>{
     }catch(err){
         res.writeHead(404,{'Content-Type':'text/html'});
         res.write(fs.readFileSync(path.join(process.cwd(),'web','404.html')));
-        return res.end()
+        res.end();
+        return;
     }
 
     if(file_status.isFile()){
-        data = fs.readFileSync(filepath)
-        type = mime.contentType(path.extname(filepath))
+        fs.readFile(filepath,(err,data)=>{
+        type = mime.contentType(path.extname(filepath));
         res.writeHead(200,{'Content-Type':type});
-        res.write(data)
-        res.end()
+        res.end(data);
+        return; 
+        })
     }else if(!file_status.isFile()){
         res.writeHead(302,{'location':req.url + 'index.html'})
-        res.end()   
+        res.end();
+        return;    
     }else{
         res.writeHead(500,{'content-type':'text/html'})
-        res.write(fs.readFileSync(path.join(process.cwd(),'web','500.html')))
-        res.end()
+        res.end(fs.readFileSync(path.join(process.cwd(),'web','500.html')));
+        return; 
     }
     
 })
