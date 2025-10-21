@@ -18,11 +18,10 @@ const server = http.createServer((req,res)=>{
     }
 
     if(file_status.isFile()){
-        fs.readFile(filepath,(err,data)=>{
-        type = mime.contentType(path.extname(filepath));
-        res.writeHead(200,{'Content-Type':type});
-        res.end(data);
-        })
+        type = mime.contentType(path.extname(filepath))
+        res.writeHead(200,{'content-type':type})
+        res.write(fs.readFileSync(filepath))
+        res.end()
         return;
     }else if(!file_status.isFile()){
         res.writeHead(302,{'location':req.url + 'index.html'})
