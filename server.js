@@ -18,19 +18,17 @@ const server = http.createServer((req,res)=>{
     }
 
     if(file_status.isFile()){
-        type = mime.contentType(path.extname(filepath))
-        res.writeHead(200,{'content-type':type})
-        res.write(fs.readFileSync(filepath))
-        res.end()
-        return;
-    }else if(!file_status.isFile()){
-        res.writeHead(302,{'location':req.url + 'index.html'})
+        type = mime.contentType(path.extname(filepath));
+        res.writeHead(200,{'content-type':type});
+        res.write(fs.readFileSync(filepath));
         res.end();
-        return;    
+        return;
+    }else if(file_status.isDirectory()){
+        res.writeHead(302,{'location':req.url + 'index.html'});
+        res.end();
     }else{
-        res.writeHead(500,{'content-type':'text/html'})
+        res.writeHead(500,{'content-type':'text/html'});
         res.end(fs.readFileSync(path.join(process.cwd(),'web','500.html')));
-        return; 
     }
     
 })
