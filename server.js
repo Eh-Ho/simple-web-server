@@ -22,8 +22,8 @@ const server = http.createServer((req,res)=>{
         type = mime.contentType(path.extname(filepath));
         res.writeHead(200,{'Content-Type':type});
         res.end(data);
-        return; 
         })
+        return;
     }else if(!file_status.isFile()){
         res.writeHead(302,{'location':req.url + 'index.html'})
         res.end();
